@@ -14,19 +14,16 @@ export default new VueRouter({
       {
         path: '/',
         name: 'products',
-        //props: true,
         component: Products
       },
       {
         path: '/viewproduct/:id',
         name: 'viewproduct',
-        //props: true,
         component: ViewProduct
       },
       {
         path: '/leaders',
         name: 'leaders',
-        //props: true,
         component: Leaders
       },
       {
