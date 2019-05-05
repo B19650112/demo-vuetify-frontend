@@ -49,8 +49,8 @@ export default {
     return {
         drawer: true,
         links: [
-            { icon: 'remove_shopping_cart', text: 'Home', route: '/' },
-            { icon: 'group', text: 'Leaders', route: '/about' },
+            { icon: 'remove_shopping_cart', text: 'My Product', route: '/' },
+            { icon: 'group', text: 'Leaders', route: '/leaders' },
             { icon: 'streetview', text: 'History', route: '/history' },
             { icon: 'group_add', text: 'Lists', route: '/lists' },
         ]
