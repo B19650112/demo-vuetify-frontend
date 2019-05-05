@@ -4,6 +4,7 @@ import History from './views/History'
 import Leaders from './views/Leaders'
 import Lists from './views/Lists'
 import Products from './views/Products'
+import ViewProduct from './views/ViewProduct'
 
 Vue.use(VueRouter)
 
@@ -13,18 +14,19 @@ export default new VueRouter({
       {
         path: '/',
         name: 'products',
-        props: true,
+        //props: true,
         component: Products
       },
       {
         path: '/viewproduct/:id',
         name: 'viewproduct',
-        props: true,
+        //props: true,
         component: ViewProduct
       },
       {
         path: '/leaders',
         name: 'leaders',
+        //props: true,
         component: Leaders
       },
       {

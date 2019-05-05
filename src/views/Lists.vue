@@ -42,7 +42,7 @@
 <script>
 
 import otherservice from "@/services/OtherService";
-import _ from 'lodash';
+import _ from "lodash";
 
 export default {
   
