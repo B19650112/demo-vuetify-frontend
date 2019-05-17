@@ -41,7 +41,7 @@
 
 <script>
 
-import otherservice from "@/services/OtherService";
+import resumeservice from "@/services/ResumeService";
 import _ from "lodash";
 
 export default {
@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     listTeam() {
-      otherservice.getListPerson().then(lists => {this.lists = lists})
+      resumeservice.getListResume().then(lists => {this.lists = lists})
     },
     toggle(index) {
       const i = this.selected.indexOf(index)

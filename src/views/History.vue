@@ -29,7 +29,7 @@
 
 <script>
 
-  import otherservice from "@/services/OtherService";
+  import resumeservice from "@/services/ResumeService";
 
   export default {
     data() {
@@ -43,7 +43,7 @@
     },
     methods: {
       listhistory() {
-        otherservice.getListPerson().then(historys => {this.historys = historys})
+        resumeservice.getListResume().then(historys => {this.historys = historys})
       },
     }
   }

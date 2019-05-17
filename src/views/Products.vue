@@ -9,9 +9,9 @@
       </v-flex>
     </v-layout>
     <v-layout row wrap>
-      <v-flex xs2 v-for="product in products" :key="product.id">
+      <v-flex xs2 v-for="product in displayedProducts" :key="product.id">
         <v-hover>
-          <v-card :to="{name: 'viewproduct', params: {id:product.ID}}" exact:style="{ cursor: 'pointer'}"
+          <v-card :to="{name:'viewproduct', params: {id:product.ID}}" exact:style="{ cursor: 'pointer'}"
             slot-scope="{ hover }" :class="`elevation-${hover ? 12 : 2}`" color="blue-grey lighten-5">
             <v-img :src="product.imagepath" height="135" aspect-ratio="0.2" class="grey lighten-2"></v-img>
             <v-card-title primary-title>
@@ -27,25 +27,32 @@
         </v-hover>
       </v-flex>
     </v-layout>
+    <v-container fluid class="pa-0">
     <v-layout row wrap>
-      <v-flex xs5>&nbsp;</v-flex>
-      <div class="row mt-2">
-        <v-btn-toggle v-model="toggle_none">
-          <v-btn flat color="teal darken-1" @click="actionPage('0')">
-            <v-icon>fast_rewind</v-icon>
-          </v-btn>
-          <v-btn flat color="teal darken-1" @click="actionPage('1')">
-            <v-icon>skip_previous</v-icon>
-          </v-btn>
-          <v-btn flat color="teal darken-1" @click="actionPage('2')">
-            <v-icon>skip_next</v-icon>
-          </v-btn>
-          <v-btn flat color="teal darken-1" @click="actionPage('3')">
-            <v-icon>fast_forward</v-icon>
-          </v-btn>
-        </v-btn-toggle>
+      
+      <v-flex xs4>&nbsp;</v-flex>
+        <div class="row mt-2">
+          <v-btn-toggle v-model="toggle_none">
+            <v-btn outline color="error" depressed small style="min-width:30px;" v-if="page != 1" @click="page=1">
+              <v-icon>fast_rewind</v-icon>
+            </v-btn>
+            <v-btn outline color="error" depressed small style="min-width:30px;" v-if="page != 1" @click="page--">
+              <v-icon>chevron_left</v-icon>
+            </v-btn>
+            <v-btn outline color="error" depressed small style="min-width:30px;" v-for="pageNumber in pages.slice(page-1, page+4)" @click="page=pageNumber"
+              :key="pageNumber">{{pageNumber}}
+            </v-btn>
+            <v-btn outline color="error" depressed small style="min-width:30px;" v-if="page < pages.length" @click="page++" >
+                <v-icon>chevron_right</v-icon>
+            </v-btn>
+            <v-btn outline color="error" depressed small style="min-width:30px;" v-for="pageNumber in pages.slice(pages.length-1, pages.length)" @click="page=pageNumber"
+              :key="pageNumber">
+                <v-icon>fast_forward</v-icon>
+            </v-btn>
+          </v-btn-toggle>
       </div>
     </v-layout>
+    </v-container>
   </div>
 </template>
 
@@ -54,54 +61,58 @@
 import productservice from "@/services/ProductService";
 
 export default {
+  
   data() {
     return {
-      moption: "",
-      mStart: 0,
-      mEnd: 0,
       toggle_none: null,
       mSearch: "",
       xSearch: "",
-      startend:[],
-      getend:[],
       products: [],
-      
+      page: 1,
+      mSisa:0,
+      perPage: 12,
+      pages: [],
     };
+   
   },
   mounted() {
-    this.startPage()
+    this.listProduct()
   },
-  methods: {
-    //startPage for: get defaultpage and start mEnd number
-    startPage() {
-      productservice.getDefaultPage().then(getend => {this.getend = getend
-        var data = JSON.parse(JSON.stringify(this.getend))
-        this.mEnd = data[0].defaultpage
-        this.listProduct();
-      })
-    },
-    listSearch(mSearch) {
+  methods: {   
+   listSearch(mSearch) {
       if(this.mSearch != this.xSearch) {
         this.xSearch = this.mSearch
-        this.mStart = 0
-        this.startPage()
+        this.listProduct()
       }
     },
     listProduct() {
-      productservice.getListProduct(this.mStart, this.mEnd, this.mSearch).then(products => {
+      productservice.getListProduct(this.mSearch).then(products => {
         this.products = products
+        this.mSisa = this.products.length % this.perPage
       });
     },
-    
-    actionPage(moption) {
-      this.moption = moption;
-      productservice.getPagination(this.moption, this.mStart, this.mEnd, this.mSearch).then(startend => {
-        this.startend = startend
-        var data = JSON.parse(JSON.stringify(this.startend))
-        this.mStart = data[0].startID
-        this.mEnd = data[0].endID
-        this.listProduct();
-      });
+    setProducts() {
+      let numberOfPages = Math.ceil(this.products.length / this.perPage);
+      for (let i = 1; i <= numberOfPages; i++) {
+      this.pages.push(i);
+      }
+    },
+    paginate(products) {
+      let page = this.page;
+      let perPage = this.perPage;
+      let from = (page * perPage) - perPage;
+      let to = (page * perPage);      
+      return products.slice(from, to);
+    }
+  },
+  watch: {
+    products(){
+      this.setProducts();
+    }
+  },
+  computed: {
+    displayedProducts: function () {
+      return this.paginate(this.products);
     }
   }
 };

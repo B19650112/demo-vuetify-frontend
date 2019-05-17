@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default {
 
-  getListPerson() {
+  getListResume() {
     return axios.get('grp02/listtblresume').then(response=> { return response.data })
   },
   

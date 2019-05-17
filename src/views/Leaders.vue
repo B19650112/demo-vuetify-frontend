@@ -13,7 +13,7 @@
             </v-responsive>
             <v-card-text>
               <div class="subheading">{{ leader.name }}</div>
-              <div class="gray--text">{{ leader.title }}</div>
+              <div class="gray--text" style="font-size:12px">{{ leader.title}}</div>
             </v-card-text>
             <v-card-actions>
               <v-btn flat color="green accent-2">
@@ -31,7 +31,7 @@
 
 <script>
 
-  import otherservice from "@/services/OtherService";
+  import resumeservice from "@/services/ResumeService";
 
   export default {
     data() {
@@ -45,7 +45,7 @@
     },
     methods: {
       listleader() {
-        otherservice.getListPerson().then(leaders => {this.leaders = leaders})
+        resumeservice.getListResume().then(leaders => {this.leaders = leaders})
       },
     }
   }
